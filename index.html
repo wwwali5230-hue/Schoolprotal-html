@@ -102,7 +102,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h2 class="text-center mb-4"><i class="fas fa-school"></i> Piran Ghaib School Data</h2>
+        <h2 class="text-center mb-4"><i class="fas fa-school"></i> School Portal Login</h2>
         <form id="loginForm">
             <div class="mb-3">
                 <input type="password" id="password" class="form-control" placeholder="Enter Password" required>
@@ -532,12 +532,17 @@
             document.getElementById('portal').style.display = 'block';
             document.querySelector('.login-container').style.display = 'none';
             document.getElementById('role').textContent = currentRole;
+            // Load all data when portal is shown
+            loadData('newAdmission');
+            loadData('remainingAdmission');
+            loadData('teacherSalary');
+            loadData('skipVoucher');
         }
 
         function showSection(sectionId) {
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
             document.getElementById(sectionId).style.display = 'block';
-            loadData(sectionId);
+            // Data is already loaded in showPortal
         }
 
         function showAdminControls() {
@@ -847,13 +852,19 @@
             document.getElementById('svStudentName').value = sv.studentName;
             document.getElementById('svFatherName').value = sv.fatherName;
             document.getElementById('svClass').value = sv.class;
-            document.getElementById('svReason').value = sv.reason;
+            document.getElementById('svReason').value = sv.reason; }
+                    function deleteSkipVoucher(index) {
             skipVouchers.splice(index, 1);
             localStorage.setItem('skipVouchers', JSON.stringify(skipVouchers));
+            loadSkipVouchers();
         }
 
-        function deleteSkipVoucher(index) {
-            skipVouchers.splice(index)}
-                </script>
+        function loadData(sectionId) {
+            if (sectionId === 'newAdmission') loadAdmissions();
+            else if (sectionId === 'remainingAdmission') loadRemainingAdmissions();
+            else if (sectionId === 'teacherSalary') loadTeacherSalaries();
+            else if (sectionId === 'skipVoucher') loadSkipVouchers();
+        }
+    </script>
 </body>
 </html>
