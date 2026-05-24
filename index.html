@@ -3,247 +3,779 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Portal</title>
+    <title>School Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Dark Theme */
         body { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            min-height: 100vh;
+            background-color: #1a1a1d; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e0e0e0;
         }
-        .login-container { 
-            max-width: 400px; 
-            margin: 5% auto; 
-            background: white; 
-            padding: 30px; 
-            border-radius: 15px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
-            animation: fadeIn 0.5s ease-in-out;
+        
+        .login-section { display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-card { 
+            width: 400px; 
+            padding: 40px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+            border-radius: 10px; 
+            background: #2d2d30; 
+            border: 1px solid #3e3e42;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        .login-card h3 { color: #fff; }
+        .login-card input { 
+            background: #1a1a1d; 
+            border: 1px solid #3e3e42; 
+            color: #fff;
         }
-        .portal { 
-            display: none; 
-            padding: 20px; 
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        .menu { 
-            display: flex; 
-            justify-content: center; 
-            flex-wrap: wrap; 
-            gap: 15px; 
-            margin-bottom: 30px; 
-        }
-        .menu button { 
-            background: linear-gradient(45deg, #007bff, #0056b3); 
+        .login-card input::placeholder { color: #888; }
+        
+        /* Dashboard Layout */
+        .dashboard-section { display: none; height: 100vh; display: flex; }
+        .sidebar { 
+            width: 250px; 
+            background: #0f0f10; 
             color: white; 
-            border: none; 
-            padding: 12px 25px; 
-            border-radius: 25px; 
+            height: 100%; 
+            overflow-y: auto; 
+            position: fixed; 
+            border-right: 1px solid #3e3e42;
+        }
+        .sidebar h4 { 
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #3e3e42; 
+            color: #4eb3d3;
+        }
+        .nav-link { 
+            color: #bdc3c7; 
+            padding: 15px 20px; 
             cursor: pointer; 
-            transition: all 0.3s ease; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
         }
-        .menu button:hover { 
-            background: linear-gradient(45deg, #0056b3, #004085); 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        .nav-link:hover, .nav-link.active { 
+            background: #1f1f23; 
+            color: white; 
+            border-left-color: #4eb3d3; 
         }
-        .section { 
-            display: none; 
-            background: white; 
-            padding: 25px; 
-            border-radius: 15px; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
-            margin-bottom: 20px; 
-            animation: fadeIn 0.5s ease-in-out;
+        
+        .main-content { 
+            margin-left: 250px; 
+            width: calc(100% - 250px); 
+            padding: 20px; 
+            overflow-y: auto; 
+            height: 100%; 
         }
-        .admin-controls { display: none; }
-        .user-view { display: none; }
-        table { 
+        
+        /* Tables & Forms - Dark Theme */
+        .data-table { 
             width: 100%; 
             border-collapse: collapse; 
-            margin-top: 20px; 
-            border-radius: 10px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: #2d2d30; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
         }
-        th, td { 
-            border: 1px solid #ddd; 
+        .data-table th, .data-table td { 
             padding: 12px; 
+            border: 1px solid #3e3e42; 
             text-align: left; 
+            color: #e0e0e0;
         }
-        th { 
-            background: linear-gradient(45deg, #f8f9fa, #e9ecef); 
-            font-weight: bold; 
-            color: #495057;
+        .data-table th { 
+            background-color: #4eb3d3; 
+            color: #0f0f10; 
         }
-        tbody tr:hover { background-color: #f1f3f4; }
-        .btn-sm { 
-            margin: 2px; 
-            border-radius: 5px;
+        .data-table tr:hover { 
+            background-color: #1f1f23; 
         }
-        .logout-btn { 
-            position: fixed; 
-            bottom: 20px; 
-            right: 20px; 
-            z-index: 1000;
+        
+        .form-section { 
+            background: #2d2d30; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            border: 1px solid #3e3e42;
         }
-        .no-data { 
-            text-align: center; 
-            color: #6c757d; 
-            font-style: italic; 
-            padding: 20px;
+        .form-section h5 { 
+            color: #4eb3d3; 
+            border-bottom: 1px solid #3e3e42;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .action-btn { 
+            margin-right: 5px; 
+            padding: 5px 10px; 
+            font-size: 12px; 
+        }
+        
+        /* Image Preview */
+        .img-preview { 
+            width: 50px; 
+            height: 50px; 
+            object-fit: cover; 
+            border-radius: 50%; 
+            border: 2px solid #4eb3d3; 
+        }
+        
+        /* Form Inputs - Dark Theme */
+        .form-control, .form-select {
+            background: #1a1a1d;
+            border: 1px solid #3e3e42;
+            color: #fff;
+        }
+        .form-control:focus, .form-select:focus {
+            background: #1a1a1d;
+            border-color: #4eb3d3;
+            color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(78, 179, 211, 0.25);
+        }
+        .form-control::placeholder { color: #888; }
+        .form-control:disabled {
+            background: #252528;
+            color: #888;
+        }
+        
+        /* Radio buttons */
+        .form-check-input {
+            background: #1a1a1d;
+            border-color: #3e3e42;
+        }
+        .form-check-label {
+            color: #e0e0e0;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: #4eb3d3;
+            border-color: #4eb3d3;
+            color: #0f0f10;
+        }
+        .btn-primary:hover {
+            background: #3a9fc0;
+            border-color: #3a9fc0;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            border-color: #28a745;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            border-color: #ffc107;
+            color: #000;
+        }
+        
+        /* Headings */
+        h2, h3, h4, h5 {
+            color: #fff;
+        }
+        
+        /* Labels */
+        label {
+            color: #bdc3c7;
+        }
+        
+        /* Table Scroll */
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        /* User view only */
+        .user-view-only input, .user-view-only select, .user-view-only button { 
+            pointer-events: none; 
+            opacity: 0.7; 
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2 class="text-center mb-4"><i class="fas fa-school"></i> School Portal Login</h2>
-        <form id="loginForm">
+
+    <!-- LOGIN SECTION -->
+    <div class="login-section" id="loginArea">
+        <div class="login-card text-center">
+            <h3 class="mb-4 text-primary"><i class="fas fa-school"></i> School Management</h3>
             <div class="mb-3">
-                <input type="password" id="password" class="form-control" placeholder="Enter Password" required>
+                <input type="text" id="username" class="form-control" placeholder="Username (admin/user)">
             </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
-        </form>
-        <div id="error" class="alert alert-danger mt-3" style="display: none;">Invalid password. Try 'admin123' for admin or 'user123' for user.</div>
+            <div class="mb-3">
+                <input type="password" id="password" class="form-control" placeholder="Password (123)">
+            </div>
+            <button class="btn btn-primary w-100" onclick="login()">Login</button>
+            <p class="mt-3" style="color: #888; font-size: 12px;">Admin: admin/123 | User: user/123</p>
+        </div>
     </div>
 
-    <div class="portal container" id="portal">
-        <h2 class="text-center mb-4"><i class="fas fa-graduation-cap"></i> Welcome to School Portal</h2>
-        <p class="text-center">Role: <span id="role" class="badge bg-secondary"></span></p>
-        <div class="menu">
-            <button onclick="showSection('newAdmission')"><i class="fas fa-user-plus"></i> New Admission</button>
-            <button onclick="showSection('remainingAdmission')"><i class="fas fa-clock"></i> Remaining Admission</button>
-            <button onclick="showSection('teacherSalary')"><i class="fas fa-money-bill-wave"></i> Teacher Salary</button>
-            <button onclick="showSection('skipVoucher')"><i class="fas fa-receipt"></i> Skip Voucher Students</button>
+    <!-- DASHBOARD SECTION -->
+    <div class="dashboard-section" id="dashboardArea" style="display: none;">
+        
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h4><i class="fas fa-graduation-cap"></i> School Admin</h4>
+            <div class="nav-group">
+                <div class="nav-link active" onclick="showTab('tab-new-admission')"><i class="fas fa-user-plus me-2"></i>1. New Admission</div>
+                <div class="nav-link" onclick="showTab('tab-remaining')"><i class="fas fa-clock me-2"></i>2. Remaining Admission</div>
+                <div class="nav-link" onclick="showTab('tab-free-kids')"><i class="fas fa-gift me-2"></i>3. Free Kids Students</div>
+                <div class="nav-link" onclick="showTab('tab-yearly-paid')"><i class="fas fa-calendar-check me-2"></i>4. Yearly Paid List</div>
+                <div class="nav-link" onclick="showTab('tab-shift-in')"><i class="fas fa-sign-in-alt me-2"></i>5. Shift In Students</div>
+                <div class="nav-link" onclick="showTab('tab-shift-out')"><i class="fas fa-sign-out-alt me-2"></i>6. Shift Out Students</div>
+                <div class="nav-link" onclick="showTab('tab-left')"><i class="fas fa-user-minus me-2"></i>7. Left Students</div>
+                <div class="nav-link" onclick="showTab('tab-van')"><i class="fas fa-bus me-2"></i>8. Van Students</div>
+                <div class="nav-link" onclick="showTab('tab-recovery')"><i class="fas fa-file-invoice me-2"></i>9. Daily Recovery</div>
+                <div class="nav-link" onclick="showTab('tab-advance')"><i class="fas fa-money-bill-wave me-2"></i>10. Advance Fee</div>
+            </div>
+            <div class="nav-link text-danger mt-4" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</div>
         </div>
 
-        <div class="section" id="newAdmission">
-            <h3><i class="fas fa-user-plus"></i> New Admission Details</h3>
-            <div class="admin-controls">
-                <form id="admissionForm" class="mb-4">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Student Name:</label>
-                            <input type="text" id="studentName" class="form-control" required>
+        <!-- Main Content -->
+        <div class="main-content">
+            
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 id="pageTitle"><i class="fas fa-user-plus me-2"></i>New Admission</h2>
+                <div>
+                    <span id="userDisplay" class="me-3" style="color: #4eb3d3;"></span>
+                    <button class="btn btn-danger d-none" id="logoutBtn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <!-- 1. NEW ADMISSION TAB -->
+            <div id="tab-new-admission" class="tab-content active">
+                <div class="form-section">
+                    <h5><i class="fas fa-user-plus me-2"></i>Add New Student</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" id="na-id" class="form-control" placeholder="Student ID (Auto)" disabled>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Father Name:</label>
-                            <input type="text" id="fatherName" class="form-control" required>
+                        <div class="col-md-3">
+                            <input type="text" id="na-name" class="form-control" placeholder="Student Name *">
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label>Class:</label>
-                            <select id="class" class="form-control" required>
-                                <option value="">Select Class</option>
+                        <div class="col-md-3">
+                            <input type="text" id="na-father" class="form-control" placeholder="Father Name *">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="na-class" class="form-select">
+                                <option value="">Select Class *</option>
                                 <option value="P.G">P.G</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
+                                <option value="P-1">P-1</option>
+                                <option value="P-2">P-2</option>
+                                <option value="L-1">L-1</option>
+                                <option value="L-2">L-2</option>
+                                <option value="L-3">L-3</option>
+                                <option value="L-4">L-4</option>
+                                <option value="L-5">L-5</option>
+                                <option value="L-6">L-6</option>
+                                <option value="L-7">L-7</option>
+                                <option value="L-8">L-8</option>
+                                <option value="L-9">L-9</option>
+                                <option value="L-10">L-10</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Amount:</label>
-                            <input type="number" id="amount" class="form-control" required>
+                        <div class="col-md-3">
+                            <input type="number" id="na-package" class="form-control" placeholder="Admission Package Amount *" oninput="calcRemaining()">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Remaining Amount:</label>
-                            <input type="number" id="remainingAmount" class="form-control" required>
+                        <div class="col-md-3">
+                            <input type="number" id="na-paid" class="form-control" placeholder="Paid Amount *" oninput="calcRemaining()">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="na-remaining" class="form-control" placeholder="Remaining Amount" disabled>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="na-date" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Upload Photo</label>
+                            <input type="file" id="na-img" class="form-control" accept="image/*" onchange="previewImage(event, 'img-preview-na')">
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <img id="img-preview-na" class="img-preview" src="https://via.placeholder.com/50">
+                        </div>
+                        
+                        <div class="col-md-12 mt-2">
+                            <label class="me-3">
+                                <input type="radio" name="admissionStatus" id="status-full" checked> Full Admission Paid
+                            </label>
+                            <label>
+                                <input type="radio" name="admissionStatus" id="status-remaining"> Remaining Amount
+                            </label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <button class="btn btn-success" onclick="saveData('new-admission')"><i class="fas fa-save me-2"></i>Save Admission</button>
+                            <button class="btn btn-warning d-none" id="na-update-btn" onclick="updateData('new-admission')"><i class="fas fa-edit me-2"></i>Update</button>
+                            <button class="btn btn-secondary d-none" id="na-cancel-btn" onclick="cancelEdit('new-admission')"><i class="fas fa-times me-2"></i>Cancel</button>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label>Fee Months Paid:</label>
-                        <select id="feeMonths" class="form-control" multiple required>
-                            <option value="January">January</option>
-                            <option value="February">February</option>
-                            <option value="March">March</option>
-                            <option value="April">April</option>
-                            <option value="May">May</option>
-                            <option value="June">June</option>
-                            <option value="July">July</option>
-                            <option value="August">August</option>
-                            <option value="September">September</option>
-                            <option value="October">October</option>
-                            <option value="November">November</option>
-                            <option value="December">December</option>
+                </div>
+                <h5><i class="fas fa-list me-2"></i>Students List</h5>
+                <div class="table-responsive">
+                    <table class="data-table" id="table-new-admission">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Father</th><th>Class</th><th>Package</th><th>Paid</th><th>Rem.</th><th>Date</th><th>Photo</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 2. REMAINING ADMISSION TAB -->
+            <div id="tab-remaining" class="tab-content">
+                <h5><i class="fas fa-clock me-2"></i>Students with Remaining Fee</h5>
+                <div class="table-responsive">
+                    <table class="data-table" id="table-remaining">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Father</th><th>Class</th><th>Package</th><th>Paid</th><th>Remaining</th><th>Date</th><th>Photo</th><th>Action</th>
+                            </tr>                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 3. FREE KIDS STUDENTS TAB -->
+            <div id="tab-free-kids" class="tab-content">
+                <div class="form-section">
+                    <h5><i class="fas fa-gift me-2"></i>Add Free Kid Student</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" id="fk-id" class="form-control" placeholder="Student ID (Auto)" disabled>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="fk-name" class="form-control" placeholder="Student Name *">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="fk-class" class="form-select">
+                                <option value="">Select Class *</option>
+                                <option value="P.G">P.G</option>
+                                <option value="P-1">P-1</option>
+                                <option value="P-2">P-2</option>
+                                <option value="L-1">L-1</option>
+                                <option value="L-2">L-2</option>
+                                <option value="L-3">L-3</option>
+                                <option value="L-4">L-4</option>
+                                <option value="L-5">L-5</option>
+                                <option value="L-6">L-6</option>
+                                <option value="L-7">L-7</option>
+                                <option value="L-8">L-8</option>
+                                <option value="L-9">L-9</option>
+                                <option value="L-10">L-10</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="fk-contact" class="form-control" placeholder="Contact Number">
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" id="fk-reason" class="form-control" placeholder="Reason for Free">
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-success" onclick="saveData('free-kids')"><i class="fas fa-save me-2"></i>Save</button>
+                            <button class="btn btn-warning d-none" id="fk-update-btn" onclick="updateData('free-kids')"><i class="fas fa-edit me-2"></i>Update</button>
+                            <button class="btn btn-secondary d-none" id="fk-cancel-btn" onclick="cancelEdit('free-kids')"><i class="fas fa-times me-2"></i>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <h5><i class="fas fa-list me-2"></i>Free Kids List</h5>
+                <div class="table-responsive">
+                    <table class="data-table" id="table-free-kids">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Class</th><th>Contact</th><th>Reason</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 4. YEARLY PAID STUDENTS TAB -->
+            <div id="tab-yearly-paid" class="tab-content">
+                <div class="form-section">
+                    <h5><i class="fas fa-calendar-check me-2"></i>Add Yearly Paid Student</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" id="yp-id" class="form-control" placeholder="Student ID (Auto)" disabled>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="yp-name" class="form-control" placeholder="Student Name *">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="yp-class" class="form-select">
+                                <option value="">Select Class *</option>
+                                <option value="P.G">P.G</option>
+                                <option value="P-1">P-1</option>
+                                <option value="P-2">P-2</option>
+                                <option value="L-1">L-1</option>
+                                <option value="L-2">L-2</option>
+                                <option value="L-3">L-3</option>
+                                <option value="L-4">L-4</option>
+                                <option value="L-5">L-5</option>
+                                <option value="L-6">L-6</option>
+                                <option value="L-7">L-7</option>
+                                <option value="L-8">L-8</option>
+                                <option value="L-9">L-9</option>
+                                <option value="L-10">L-10</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="yp-contact" class="form-control" placeholder="Contact Number">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="month" id="yp-start" class="form-control" placeholder="Starting Month">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="month" id="yp-end" class="form-control" placeholder="Ending Month">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success" onclick="saveData('yearly-paid')"><i class="fas fa-save me-2"></i>Save</button>
+                            <button class="btn btn-warning d-none" id="yp-update-btn" onclick="updateData('yearly-paid')"><i class="fas fa-edit me-2"></i>Update</button>
+                            <button class="btn btn-secondary d-none" id="yp-cancel-btn" onclick="cancelEdit('yearly-paid')"><i class="fas fa-times me-2"></i>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <h5><i class="fas fa-list me-2"></i>Yearly Paid List</h5>
+                <div class="table-responsive">
+                    <table class="data-table" id="table-yearly-paid">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Class</th><th>Contact</th><th>Start Month</th><th>End Month</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 5. SHIFT IN STUDENTS TAB -->
+            <div id="tab-shift-in" class="tab-content">
+                <div class="form-section">
+                    <h5><i class="fas fa-sign-in-alt me-2"></i>Shift In Student</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" id="si-id" class="form-control" placeholder="Student ID">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="si-name" class="form-control" placeholder="Student Name *">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="si-class" class="form-select">
+                                <option value="">Select Class *</option>
+                                <option value="P.G">P.G</option>
+                                <option value="P-1">P-1</option>
+                                <option value="P-2">P-2</option>
+                                <option value="L-1">L-1</option>
+                                <option value="L-2">L-2</option>
+                                <option value="L-3">L-3</option>
+                                <option value="L-4">L-4</option>
+                                <option value="L-5">L-5</option>
+                                <option value="L-6">L-6</option>
+                                <option value="L-7">L-7</option>
+                                <option value="L-8">L-8</option>
+                                <option value="L-9">L-9</option>
+                                <option value="L-10">L-10</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="si-campus" class="form-control" placeholder="Transfer In Campus Name">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="si-pending-fee" class="form-control" placeholder="Pending Fee Month">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="si-pending-adm" class="form-control" placeholder="Pending Admission Amount">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="si-fund" class="form-control" placeholder="Annual Fund Pending">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Admission Form Photo (PNG)</label>
+                            <input type="file" id="si-img" class="form-control" accept="image/png, image/*">
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-success" onclick="saveData('shift-in')"><i class="fas fa-save me-2"></i>Save</button>
+                            <button class="btn btn-warning d-none" id="si-update-btn" onclick="updateData('shift-in')"><i class="fas fa-edit me-2"></i>Update</button>
+                            <button class="btn btn-secondary d-none" id="si-cancel-btn" onclick="cancelEdit('shift-in')"><i class="fas fa-times me-2"></i>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <h5><i class="fas fa-list me-2"></i>Shift In List</h5>
+                <div class="table-responsive">
+                    <table class="data-table" id="table-shift-in">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Class</th><th>Campus</th><th>Pending Fee</th><th>Pending Adm</th><th>Fund</th><th>Form</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 6. SHIFT OUT STUDENTS TAB -->
+            <div id="tab-shift-out" class="tab-content">
+                <div class="form-section">
+                    <h5><i class="fas fa-sign-out-alt me-2"></i>Shift Out Student</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" id="so-id" class="form-control" placeholder="Student ID">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="so-name" class="form-control" placeholder="Student Name *">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="so-class" class="form-select">
+                                <option value="">Select Class *</option>
+                                <option value="P.G">P.G</option>
+                                <option value="P-1">P-1</option>
+                                <option value="P-2">P-2</option>
+                                <option value="L-1">L-1</option>
+                                <option value="L-2">L-2</option>
+                                <option value="L-3">L-3</option>
+                                <option value="L-4">L-4</option>
+                                <option value="L-5">L-5</option>
+                                <option value="L-6">L-6</option>
+                                <option value="L-7">L-7</option>
+                                <option value="L-8">L-8</option>
+                                <option value="L-9">L-9</option>
+                                <option value="L-10">L-10</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="so-campus" class="form-control" placeholder="Transfer Out Campus Name">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="so-pending-fee" class="form-control" placeholder="Pending Fee Month">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="so-pending-adm" class="form-control" placeholder="Pending Admission Amount">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="so-fund" class="form-control" placeholder="Annual Fund Pending">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Admission Form Photo (PNG)</label>
+                            <input type="file" id="so-img" class="form-control" accept="image/png, image/*">
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-success" onclick="saveData('shift-out')"><i class="fas fa-save me-2"></i>Save</button>
+                            <button class="btn btn-warning d-none" id="so-update-btn" onclick="updateData('shift-out')"><i class="fas fa-edit me-2"></i>Update</button>
+                            <button class="btn btn-secondary d-none" id="so-cancel-btn" onclick="cancelEdit('shift-out')"><i class="fas fa-times me-2"></i>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <h5><i class="fas fa-list me-2"></i>Shift Out List</h5>
+                <div class="table-responsive">
+                    <table class="data-table" id="table-shift-out">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Class</th><th>Campus</th><th>Pending Fee</th><th>Pending Adm</th><th>Fund</th><th>Form</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 7. LEFT STUDENTS TAB -->
+            <div id="tab-left" class="tab-content">
+                <div class="form-section">
+                    <h5><i class="fas fa-user-minus me-2"></i>Left Student</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" id="ls-id" class="form-control" placeholder="Student ID">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="ls-name" class="form-control" placeholder="Student Name *">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="ls-class" class="form-select">
+                                <option value="">Select Class *</option>
+                                <option value="P.G">P.G</option>
+                                <option value="P-1">P-1</option>
+                                <option value="P-2">P-2</option>
+                                <option value="L-1">L-1</option>
+                                <option value="L-2">L-2</option>
+                                <option value="L-3">L-3</option>
+                                <option value="L-4">L-4</option>
+                                <option value="L-5">L-5</option>
+                                <option value="L-6">L-6</option>
+                                <option value="L-7">L-7</option>
+                                <option value="L-8">L-8</option>
+                                <option value="L-9">L-9</option>
+                                <option value="L-10">L-10</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="ls-pending-fee" class="form-control" placeholder="Pending Fee Month">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="ls-pending-adm" class="form-control" placeholder="Pending Admission Amount">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="ls-fund" class="form-control" placeholder="Annual Fund Pending">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" id="ls-reason" class="form-control" placeholder="Reason">
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-success" onclick="saveData('left')"><i class="fas fa-save me-2"></i>Save</button>
+                            <button class="btn btn-warning d-none" id="ls-update-btn" onclick="updateData('left')"><i class="fas fa-edit me-2"></i>Update</button>
+                            <button class="btn btn-secondary d-none" id="ls-cancel-btn" onclick="cancelEdit('left')"><i class="fas fa-times me-2"></i>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <h5><i class="fas fa-list me-2"></i>Left Students List</h5>
+                <div class="table-responsive">
+                    <table class="data-table" id="table-left">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Class</th><th>Pending Fee</th><th>Pending Adm</th><th>Fund</th><th>Reason</th><th>Action</th> </tr> </thead> <tbody></tbody> </table> </div> </div>
+                                        <!-- 8. VAN STUDENTS TAB -->
+        <div id="tab-van" class="tab-content">
+            <div class="form-section">
+                <h5><i class="fas fa-bus me-2"></i>Add Van Student</h5>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <input type="text" id="vn-id" class="form-control" placeholder="Student ID">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="vn-name" class="form-control" placeholder="Student Name *">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="vn-class" class="form-select">
+                            <option value="">Select Class *</option>
+                            <option value="P.G">P.G</option>
+                            <option value="P-1">P-1</option>
+                            <option value="P-2">P-2</option>
+                            <option value="L-1">L-1</option>
+                            <option value="L-2">L-2</option>
+                            <option value="L-3">L-3</option>
+                            <option value="L-4">L-4</option>
+                            <option value="L-5">L-5</option>
+                            <option value="L-6">L-6</option>
+                            <option value="L-7">L-7</option>
+                            <option value="L-8">L-8</option>
+                            <option value="L-9">L-9</option>
+                            <option value="L-10">L-10</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label>Year:</label>
-                        <select id="admissionYear" class="form-control" required>
-                            <option value="">Select Year</option>
-                            <option value="2020">2020</option>
-                            <option value="2021">2021</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                            <option value="2028">2028</option>
-                            <option value="2029">2029</option>
-                            <option value="2030">2030</option>
-                            <option value="2031">2031</option>
-                            <option value="2032">2032</option>
-                            <option value="2033">2033</option>
-                            <option value="2034">2034</option>
-                            <option value="2035">2035</option>
+                    <div class="col-md-3">
+                        <input type="number" id="vn-fee" class="form-control" placeholder="Van Fee">
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" id="vn-address" class="form-control" placeholder="House Address">
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-success" onclick="saveData('van')"><i class="fas fa-save me-2"></i>Save</button>
+                        <button class="btn btn-warning d-none" id="vn-update-btn" onclick="updateData('van')"><i class="fas fa-edit me-2"></i>Update</button>
+                        <button class="btn btn-secondary d-none" id="vn-cancel-btn" onclick="cancelEdit('van')"><i class="fas fa-times me-2"></i>Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <h5><i class="fas fa-list me-2"></i>Van Students List</h5>
+            <div class="table-responsive">
+                <table class="data-table" id="table-van">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Name</th><th>Class</th><th>Van Fee</th><th>Address</th><th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 9. DAILY RECOVERY TAB -->
+        <div id="tab-recovery" class="tab-content">
+            <div class="form-section">
+                <h5><i class="fas fa-file-invoice me-2"></i>Daily Recovery Upload (PNG)</h5>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <input type="date" id="rec-date" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Upload PNG Image</label>
+                        <input type="file" id="rec-file" class="form-control" accept="image/png, image/*">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-success mt-4" onclick="saveRecovery()"><i class="fas fa-upload me-2"></i>Upload</button>
+                    </div>
+                </div>
+            </div>
+            <h5><i class="fas fa-list me-2"></i>Recovery List</h5>
+            <div class="table-responsive">
+                <table class="data-table" id="table-recovery">
+                    <thead>
+                        <tr>
+                            <th>Date</th><th>Image Name</th><th>Preview</th><th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 10. ADVANCE FEE TAB -->
+        <div id="tab-advance" class="tab-content">
+            <div class="form-section">
+                <h5><i class="fas fa-money-bill-wave me-2"></i>Add Advance Fee Paid</h5>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <input type="text" id="af-id" class="form-control" placeholder="Student ID">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="af-name" class="form-control" placeholder="Student Name *">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="af-class" class="form-select">
+                            <option value="">Select Class *</option>
+                            <option value="P.G">P.G</option>
+                            <option value="P-1">P-1</option>
+                            <option value="P-2">P-2</option>
+                            <option value="L-1">L-1</option>
+                            <option value="L-2">L-2</option>
+                            <option value="L-3">L-3</option>
+                            <option value="L-4">L-4</option>
+                            <option value="L-5">L-5</option>
+                            <option value="L-6">L-6</option>
+                            <option value="L-7">L-7</option>
+                            <option value="L-8">L-8</option>
+                            <option value="L-9">L-9</option>
+                            <option value="L-10">L-10</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label>Date:</label>
-                        <input type="date" id="date" class="form-control" required>
+                    <div class="col-md-3">
+                        <input type="month" id="af-month" class="form-control" placeholder="Advance Month">
                     </div>
-                    <div class="mb-3">
-                        <label>Admission Type:</label><br>
-                        <input type="checkbox" id="fullPaid" name="admissionType"> Full Admission Paid<br>
-                        <input type="checkbox" id="remaining" name="admissionType"> Remaining Admission
+                    <div class="col-md-3">
+                        <input type="date" id="af-date" class="form-control" placeholder="Paid Date">
                     </div>
-                    <button type="submit" class="btn btn-success">Save Admission</button>
-                </form>
-                <h4>Admission List</h4>
-                <table id="admissionTable">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Father Name</th>
-                            <th>Class</th>
-                            <th>Amount</th>
-                            <th>Remaining</th>
-                            <th>Fee Months</th>
-                            <th>Year</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                    <div class="col-md-3">
+                        <input type="number" id="af-amount" class="form-control" placeholder="Paid Amount">
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-success" onclick="saveData('advance')"><i class="fas fa-save me-2"></i>Save</button>
+                        <button class="btn btn-warning d-none" id="af-update-btn" onclick="updateData('advance')"><i class="fas fa-edit me-2"></i>Update</button>
+                        <button class="btn btn-secondary d-none" id="af-cancel-btn" onclick="cancelEdit('advance')"><i class="fas fa-times me-2"></i>Cancel</button>
+                    </div>
+                </div>
             </div>
-            <div class="user-view">
-                <h4>New Admission List</h4>
-                <table id="admissionUserTable">
+            <h5><i class="fas fa-list me-2"></i>Advance Fee List</h5>
+            <div class="table-responsive">
+                <table class="data-table" id="table-advance">
                     <thead>
                         <tr>
-                            <th>Student Name</th>
-                            <th>Father Name</th>
-                            <th>Class</th>
-                            <th>Amount</th>
-                            <th>Remaining</th>
-                            <th>Fee Months</th>
-                            <th>Year</th>
-                            <th>Date</th>
+                            <th>ID</th><th>Name</th><th>Class</th><th>Month</th><th>Date</th><th>Amount</th><th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -251,620 +783,620 @@
             </div>
         </div>
 
-        <div class="section" id="remainingAdmission">
-            <h3><i class="fas fa-clock"></i> Remaining Admission Details</h3>
-            <div class="admin-controls">
-                <form id="remainingAdmissionForm" class="mb-4">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Student Name:</label>
-                            <input type="text" id="remStudentName" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Father Name:</label>
-                            <input type="text" id="remFatherName" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label>Class:</label>
-                            <select id="remClass" class="form-control" required>
-                                <option value="">Select Class</option>
-                                <option value="P.G">P.G</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Remaining Amount:</label>
-                            <input type="number" id="remRemainingAmount" class="form-control" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Admission Date:</label>
-                            <input type="date" id="remAdmissionDate" class="form-control" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success">Save Remaining Admission</button>
-                </form>
-                <h4>Remaining Admission List</h4>
-                <table id="remainingAdmissionTable">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Father Name</th>
-                            <th>Class</th>
-                            <th>Remaining Amount</th>
-                            <th>Admission Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="user-view">
-                <h4>Remaining Admission List</h4>
-                <table id="remainingAdmissionUserTable">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Father Name</th>
-                            <th>Class</th>
-                            <th>Remaining Amount</th>
-                            <th>Admission Date</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="section" id="teacherSalary">
-            <h3><i class="fas fa-money-bill-wave"></i> Teacher Salary Details</h3>
-            <div class="admin-controls">
-                <form id="teacherSalaryForm" class="mb-4">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Teacher Name:</label>
-                            <input type="text" id="teacherName" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Salary Deduct Amount:</label>
-                            <input type="number" id="salaryDeductAmount" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Joining Date:</label>
-                            <input type="date" id="joiningDate" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Months:</label>
-                            <select id="salaryMonths" class="form-control" multiple required>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Year:</label>
-                        <select id="salaryYear" class="form-control" required>
-                            <option value="">Select Year</option>
-                            <option value="2020">2020</option>
-                            <option value="2021">2021</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                            <option value="2028">2028</option>
-                            <option value="2029">2029</option>
-                            <option value="2030">2030</option>
-                            <option value="2031">2031</option>
-                            <option value="2032">2032</option>
-                            <option value="2033">2033</option>
-                            <option value="2034">2034</option>
-                            <option value="2035">2035</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-success">Save Teacher Salary Details</button>
-                </form>
-                <h4>Teacher Salary List</h4>
-                <table id="teacherSalaryTable">
-                    <thead>
-                        <tr>
-                            <th>Teacher Name</th>
-                            <th>Salary Deduct Amount</th>
-                            <th>Joining Date</th>
-                            <th>Months</th>
-                            <th>Year</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="user-view">
-                <h4>Teacher Salary List</h4>
-                <table id="teacherSalaryUserTable">
-                    <thead>
-                        <tr>
-                            <th>Teacher Name</th>
-                            <th>Salary Deduct Amount</th>
-                            <th>Joining Date</th>
-                            <th>Months</th>
-                            <th>Year</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="section" id="skipVoucher">
-            <h3><i class="fas fa-receipt"></i> Skip Voucher Students Details</h3>
-                        <div class="admin-controls">
-                <form id="skipVoucherForm" class="mb-4">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Student Name:</label>
-                            <input type="text" id="svStudentName" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Father Name:</label>
-                            <input type="text" id="svFatherName" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Class:</label>
-                            <select id="svClass" class="form-control" required>
-                                <option value="">Select Class</option>
-                                <option value="P.G">P.G</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Reason:</label>
-                            <input type="text" id="svReason" class="form-control" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success">Save Skip Voucher Student</button>
-                </form>
-                <h4>Skip Voucher Students List</h4>
-                <table id="skipVoucherTable">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Father Name</th>
-                            <th>Class</th>
-                            <th>Reason</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="user-view">
-                <h4>Skip Voucher Students List</h4>
-                <table id="skipVoucherUserTable">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Father Name</th>
-                            <th>Class</th>
-                            <th>Reason</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <button onclick="logout()" class="btn btn-danger logout-btn">Logout</button>
     </div>
+</div>
+</body> </html> 
+<script>
+    let currentUser = '';
+    let editingId = null;
+    let editingType = null;
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const adminPassword = 'admin123';
-        const userPassword = 'user123';
-        let currentRole = '';
-
-        // Load data from localStorage
-        let admissions = JSON.parse(localStorage.getItem('admissions')) || [];
-        let remainingAdmissions = JSON.parse(localStorage.getItem('remainingAdmissions')) || [];
-        let teacherSalaries = JSON.parse(localStorage.getItem('teacherSalaries')) || [];
-        let skipVouchers = JSON.parse(localStorage.getItem('skipVouchers')) || [];
-
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            const date = new Date(dateString);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
+    // Login Function
+    function login() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        
+        if(user === 'admin' && pass === '123') {
+            currentUser = 'admin';
+            document.getElementById('loginArea').style.display = 'none';
+            document.getElementById('dashboardArea').style.display = 'flex';
+            document.getElementById('userDisplay').innerHTML = '<i class="fas fa-user-shield me-1"></i>Admin';
+            loadAllData();
+        } else if(user === 'user' && pass === '123') {
+            currentUser = 'user';
+            document.getElementById('loginArea').style.display = 'none';
+            document.getElementById('dashboardArea').style.display = 'flex';
+            document.getElementById('userDisplay').innerHTML = '<i class="fas fa-user me-1"></i>User';
+            disableEditForUser();
+            loadAllData();
+        } else {
+            alert('Invalid Credentials!');
         }
+    }
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const password = document.getElementById('password').value;
-            if (password === adminPassword) {
-                currentRole = 'Admin';
-                showPortal();
-                showAdminControls();
-            } else if (password === userPassword) {
-                currentRole = 'User';
-                showPortal();
-                showUserViews();
+    function logout() {
+        location.reload();
+    }
+
+    // Disable Edit for User
+    function disableEditForUser() {
+        const elements = document.querySelectorAll('input, select, button, file');
+        elements.forEach(el => {
+            el.style.pointerEvents = 'none';
+            el.style.opacity = '0.6';
+        });
+    }
+
+    // Tab Navigation
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        
+        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        const titles = {
+            'tab-new-admission': '<i class="fas fa-user-plus me-2"></i>New Admission',
+            'tab-remaining': '<i class="fas fa-clock me-2"></i>Remaining Admission',
+            'tab-free-kids': '<i class="fas fa-gift me-2"></i>Free Kids Students',
+            'tab-yearly-paid': '<i class="fas fa-calendar-check me-2"></i>Yearly Paid List',
+            'tab-shift-in': '<i class="fas fa-sign-in-alt me-2"></i>Shift In Students',
+            'tab-shift-out': '<i class="fas fa-sign-out-alt me-2"></i>Shift Out Students',
+            'tab-left': '<i class="fas fa-user-minus me-2"></i>Left Students',
+            'tab-van': '<i class="fas fa-bus me-2"></i>Van Students',
+            'tab-recovery': '<i class="fas fa-file-invoice me-2"></i>Daily Recovery',
+            'tab-advance': '<i class="fas fa-money-bill-wave me-2"></i>Advance Fee'
+        };
+        document.getElementById('pageTitle').innerHTML = titles[tabId];
+    }
+
+    // Calculate Remaining
+    function calcRemaining() {
+        const pkg = document.getElementById('na-package').value || 0;
+        const paid = document.getElementById('na-paid').value || 0;
+        document.getElementById('na-remaining').value = pkg - paid;
+    }
+
+    // Preview Image
+    function previewImage(event, imgId) {
+        const file = event.target.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(imgId).src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Save Data to LocalStorage
+    function saveData(type) {
+        let data = JSON.parse(localStorage.getItem(type)) || [];
+        let id = Date.now();
+        let item = { id: id };
+        
+        // Get current date if not provided
+        const today = new Date().toISOString().split('T')[0];
+        
+        if(type === 'new-admission') {
+            item.name = document.getElementById('na-name').value;
+            item.father = document.getElementById('na-father').value;
+            item.class = document.getElementById('na-class').value;
+            item.package = document.getElementById('na-package').value;
+            item.paid = document.getElementById('na-paid').value;
+            item.remaining = document.getElementById('na-remaining').value;
+            item.date = document.getElementById('na-date').value || today;
+            item.img = document.getElementById('img-preview-na').src;
+            
+            if(document.getElementById('status-full').checked) {
+                // Full paid - stay in new admission only
+                item.status = 'full';
             } else {
-                document.getElementById('error').style.display = 'block';
+                // Remaining - also add to remaining list
+                let remItem = {...item};
+                let remData = JSON.parse(localStorage.getItem('remaining')) || [];
+                remItem.id = Date.now() + 1;
+                remData.push(remItem);
+                localStorage.setItem('remaining', JSON.stringify(remData));
+                loadTable('remaining', 'table-remaining');
             }
-        });
-
-        function showPortal() {
-            document.getElementById('portal').style.display = 'block';
-            document.querySelector('.login-container').style.display = 'none';
-            document.getElementById('role').textContent = currentRole;
-            // Load all data when portal is shown
-            loadData('newAdmission');
-            loadData('remainingAdmission');
-            loadData('teacherSalary');
-            loadData('skipVoucher');
         }
-
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            document.getElementById(sectionId).style.display = 'block';
-            // Data is already loaded in showPortal
+        else if(type === 'free-kids') {
+            item.name = document.getElementById('fk-name').value;
+            item.class = document.getElementById('fk-class').value;
+            item.contact = document.getElementById('fk-contact').value;
+            item.reason = document.getElementById('fk-reason').value;
         }
-
-        function showAdminControls() {
-            document.querySelectorAll('.admin-controls').forEach(c => c.style.display = 'block');
+        else if(type === 'yearly-paid') {
+            item.name = document.getElementById('yp-name').value;
+            item.class = document.getElementById('yp-class').value;
+            item.contact = document.getElementById('yp-contact').value;
+            item.start = document.getElementById('yp-start').value;
+            item.end = document.getElementById('yp-end').value;
         }
-
-        function showUserViews() {
-            document.querySelectorAll('.user-view').forEach(v => v.style.display = 'block');
+        else if(type === 'shift-in') {
+            item.sid = document.getElementById('si-id').value;
+            item.name = document.getElementById('si-name').value;
+            item.class = document.getElementById('si-class').value;
+            item.campus = document.getElementById('si-campus').value;
+            item.pendingFee = document.getElementById('si-pending-fee').value;
+            item.pendingAdm = document.getElementById('si-pending-adm').value;
+            item.fund = document.getElementById('si-fund').value;
+            // Handle image for shift-in
+            const siImg = document.getElementById('si-img').files[0];
+            if(siImg) {
+                const reader = new FileReader();
+                reader.onload = function(e) { item.img = e.target.result; };
+                reader.readAsDataURL(siImg);
+            }
         }
-
-        function logout() {
-            location.reload();
+        else if(type === 'shift-out') {
+            item.sid = document.getElementById('so-id').value;
+            item.name = document.getElementById('so-name').value;
+            item.class = document.getElementById('so-class').value;
+            item.campus = document.getElementById('so-campus').value;
+            item.pendingFee = document.getElementById('so-pending-fee').value;
+            item.pendingAdm = document.getElementById('so-pending-adm').value;
+            item.fund = document.getElementById('so-fund').value;
+            // Handle image for shift-out
+            const soImg = document.getElementById('so-img').files[0];
+            if(soImg) {
+                const reader = new FileReader();
+                reader.onload = function(e) { item.img = e.target.result; };
+                reader.readAsDataURL(soImg);
+            }
         }
+        else if(type === 'left') {
+            item.sid = document.getElementById('ls-id').value;
+            item.name = document.getElementById('ls-name').value;
+            item.class = document.getElementById('ls-class').value;
+            item.pendingFee = document.getElementById('ls-pending-fee').value;
+            item.pendingAdm = document.getElementById('ls-pending-adm').value;
+            item.fund = document.getElementById('ls-fund').value;
+            item.reason = document.getElementById('ls-reason').value;
+        }
+        else if(type === 'van') {
+            item.sid = document.getElementById('vn-id').value || id;
+            item.name = document.getElementById('vn-name').value;
+            item.class = document.getElementById('vn-class').value;
+            item.fee = document.getElementById('vn-fee').value;
+            item.address = document.getElementById('vn-address').value;
+        }
+        else if(type === 'advance') {
+            item.sid = document.getElementById('af-id').value;
+            item.name = document.getElementById('af-name').value;
+            item.class = document.getElementById('af-class').value;
+            item.month = document.getElementById('af-month').value;
+            item.date = document.getElementById('af-date').value || today;
+            item.amount = document.getElementById('af-amount').value;
+        }
+        
+        data.push(item);
+        localStorage.setItem(type, JSON.stringify(data));
+        loadTable(type, 'table-' + type);
+        clearForm(type);
+        alert('Saved Successfully!');
+    }
 
-        // Admissions
-        document.getElementById('admissionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const feeMonthsSelect = document.getElementById('feeMonths');
-            const selectedMonths = Array.from(feeMonthsSelect.selectedOptions).map(option => option.value);
-            const data = {
-                studentName: document.getElementById('studentName').value,
-                fatherName: document.getElementById('fatherName').value,
-                class: document.getElementById('class').value,
-                amount: document.getElementById('amount').value,
-                remainingAmount: document.getElementById('remainingAmount').value,
-                feeMonths: selectedMonths.join(', '),
-                year: document.getElementById('admissionYear').value,
-                date: document.getElementById('date').value
+    // Save Recovery (PNG) - CORRECTED FUNCTION
+    function saveRecovery() {
+        let data = JSON.parse(localStorage.getItem('recovery')) || [];
+        let file = document.getElementById('rec-file').files[0];  // Fixed: added document.getElementById
+        let date = document.getElementById('rec-date').value;
+        
+        if(file && date) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let item = { id: Date.now(), date: date, fileName: file.name, fileData: e.target.result };
+                data.push(item);
+                localStorage.setItem('recovery', JSON.stringify(data));
+                loadTable('recovery', 'table-recovery');
+                alert('File Uploaded!');
             };
-            const fullPaid = document.getElementById('fullPaid').checked;
-            const remaining = document.getElementById('remaining').checked;
-            if (fullPaid) {
-                admissions.push(data);
-                localStorage.setItem('admissions', JSON.stringify(admissions));
-                loadAdmissions();
-            }
-            if (remaining) {
-                const remData = {
-                    studentName: data.studentName,
-                    fatherName: data.fatherName,
-                    class: data.class,
-                    remainingAmount: data.remainingAmount,
-                    admissionDate: data.date
-                };
-                remainingAdmissions.push(remData);
-                localStorage.setItem('remainingAdmissions', JSON.stringify(remainingAdmissions));
-                loadRemainingAdmissions();
-            }
-            this.reset();
-        });
+            reader.readAsDataURL(file);
+        } else {
+            alert('Please select date and file!');
+        }
+    }
 
-        function loadAdmissions() {
-            const tbody = document.querySelector('#admissionTable tbody');
-            tbody.innerHTML = '';
-            const userTbody = document.querySelector('#admissionUserTable tbody');
-            userTbody.innerHTML = '';
-            if (admissions.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" class="no-data">No data available.</td></tr>';
-                userTbody.innerHTML = '<tr><td colspan="8" class="no-data">No data available.</td></tr>';
-                return;
+    // Edit Data - Load into form
+    function editData(type, id) {
+        if(currentUser !== 'admin') {
+            alert('Only Admin can edit!');
+            return;
+        }
+        
+        let data = JSON.parse(localStorage.getItem(type)) || [];
+        let item = data.find(d => d.id === id);
+        
+        if(!item) {
+            // Try with sid for other types
+            item = data.find(d => d.sid === String(id));
+        }
+        
+        if(!item) return;
+        
+        editingId = id;
+        editingType = type;
+        
+        if(type === 'new-admission') {
+            document.getElementById('na-id').value = item.id;
+            document.getElementById('na-name').value = item.name;
+            document.getElementById('na-father').value = item.father;
+            document.getElementById('na-class').value = item.class;
+            document.getElementById('na-package').value = item.package;
+            document.getElementById('na-paid').value = item.paid;
+            document.getElementById('na-remaining').value = item.remaining;
+            document.getElementById('na-date').value = item.date;
+            if(item.img) document.getElementById('img-preview-na').src = item.img;
+            
+            document.getElementById('na-update-btn').classList.remove('d-none');
+            document.getElementById('na-cancel-btn').classList.remove('d-none');
+        }
+        else if(type === 'free-kids') {
+            document.getElementById('fk-id').value = item.id;
+            document.getElementById('fk-name').value = item.name;
+            document.getElementById('fk-class').value = item.class;
+            document.getElementById('fk-contact').value = item.contact;
+            document.getElementById('fk-reason').value = item.reason;
+            
+            document.getElementById('fk-update-btn').classList.remove('d-none');
+            document.getElementById('fk-cancel-btn').classList.remove('d-none');
+        }
+        else if(type === 'yearly-paid') {
+            document.getElementById('yp-id').value = item.id;
+            document.getElementById('yp-name').value = item.name;
+            document.getElementById('yp-class').value = item.class;
+            document.getElementById('yp-contact').value = item.contact;
+            document.getElementById('yp-start').value = item.start;
+            document.getElementById('yp-end').value = item.end;
+            
+            document.getElementById('yp-update-btn').classList.remove('d-none');
+            document.getElementById('yp-cancel-btn').classList.remove('d-none');
+        }
+        else if(type === 'shift-in') {
+            document.getElementById('si-id').value = item.sid || item.id;
+            document.getElementById('si-name').value = item.name;
+            document.getElementById('si-class').value = item.class;
+            document.getElementById('si-campus').value = item.campus;
+            document.getElementById('si-pending-fee').value = item.pendingFee;
+            document.getElementById('si-pending-adm').value = item.pendingAdm;
+            document.getElementById('si-fund').value = item.fund;
+            
+            document.getElementById('si-update-btn').classList.remove('d-none');
+            document.getElementById('si-cancel-btn').classList.remove('d-none');
+        }
+        else if(type === 'shift-out') {
+            document.getElementById('so-id').value = item.sid || item.id;
+            document.getElementById('so-name').value = item.name;
+            document.getElementById('so-class').value = item.class;
+            document.getElementById('so-campus').value = item.campus;
+            document.getElementById('so-pending-fee').value = item.pendingFee;
+            document.getElementById('so-pending-adm').value = item.pendingAdm;
+            document.getElementById('so-fund').value = item.fund;
+            
+            document.getElementById('so-update-btn').classList.remove('d-none');
+            document.getElementById('so-cancel-btn').classList.remove('d-none');
+        }
+        else if(type === 'left') {
+            document.getElementById('ls-id').value = item.sid || item.id;
+            document.getElementById('ls-name').value = item.name;
+            document.getElementById('ls-class').value = item.class;
+            document.getElementById('ls-pending-fee').value = item.pendingFee;
+            document.getElementById('ls-pending-adm').value = item.pendingAdm;
+            document.getElementById('ls-fund').value = item.fund;
+            document.getElementById('ls-reason').value = item.reason;
+            
+            document.getElementById('ls-update-btn').classList.remove('d-none');
+            document.getElementById('ls-cancel-btn').classList.remove('d-none');
+        }
+        else if(type === 'van') {
+            document.getElementById('vn-id').value = item.sid || item.id;
+            document.getElementById('vn-name').value = item.name;
+            document.getElementById('vn-class').value = item.class;
+            document.getElementById('vn-fee').value = item.fee;
+            document.getElementById('vn-address').value = item.address;
+            
+            document.getElementById('vn-update-btn').classList.remove('d-none');
+            document.getElementById('vn-cancel-btn').classList.remove('d-none');
+        }
+        else if(type === 'advance') {
+            document.getElementById('af-id').value = item.sid || item.id;
+            document.getElementById('af-name').value = item.name;
+            document.getElementById('af-class').value = item.class;
+            document.getElementById('af-month').value = item.month;
+            document.getElementById('af-date').value = item.date;
+            document.getElementById('af-amount').value = item.amount;
+            
+            document.getElementById('af-update-btn').classList.remove('d-none');
+            document.getElementById('af-cancel-btn').classList.remove('d-none');
+        }
+    }
+
+    // Update Data
+    function updateData(type) {
+        if(!editingId || !editingType) return;
+        
+        let data = JSON.parse(localStorage.getItem(type)) || [];
+        
+        if(type === 'new-admission') {
+            let index = data.findIndex(d => d.id === editingId);
+            if(index !== -1) {
+                data[index].name = document.getElementById('na-name').value;
+                data[index].father = document.getElementById('na-father').value;
+                data[index].class = document.getElementById('na-class').value;
+                data[index].package = document.getElementById('na-package').value;
+                data[index].paid = document.getElementById('na-paid').value;
+                data[index].remaining = document.getElementById('na-remaining').value;
+                data[index].date = document.getElementById('na-date').value;
+                data[index].img = document.getElementById('img-preview-na').src;
             }
-            admissions.forEach((ad, index) => {
-                const row = `<tr>
-                    <td>${ad.studentName}</td>
-                    <td>${ad.fatherName}</td>
-                    <td>${ad.class}</td>
-                    <td>${ad.amount}</td>
-                    <td>${ad.remainingAmount}</td>
-                    <td>${ad.feeMonths}</td>
-                    <td>${ad.year}</td>
-                    <td>${formatDate(ad.date)}</td>
+            
+            // Also update in remaining list if exists
+            let remData = JSON.parse(localStorage.getItem('remaining')) || [];
+            let remIndex = remData.findIndex(d => d.id === editingId);
+            if(remIndex !== -1) {
+                remData[remIndex].name = document.getElementById('na-name').value;
+                remData[remIndex].father = document.getElementById('na-father').value;
+                remData[remIndex].class = document.getElementById('na-class').value;
+                remData[remIndex].package= document.getElementById('na-package').value;
+                remData[remIndex].paid = document.getElementById('na-paid').value;
+                remData[remIndex].remaining = document.getElementById('na-remaining').value;
+                remData[remIndex].date = document.getElementById('na-date').value;
+                localStorage.setItem('remaining', JSON.stringify(remData));
+            }
+        }
+        else if(type === 'free-kids') {
+            let index = data.findIndex(d => d.id === editingId);
+            if(index !== -1) {
+                data[index].name = document.getElementById('fk-name').value;
+                data[index].class = document.getElementById('fk-class').value;
+                data[index].contact = document.getElementById('fk-contact').value;
+                data[index].reason = document.getElementById('fk-reason').value;
+            }
+        }
+        else if(type === 'yearly-paid') {
+            let index = data.findIndex(d => d.id === editingId);
+            if(index !== -1) {
+                data[index].name = document.getElementById('yp-name').value;
+                data[index].class = document.getElementById('yp-class').value;
+                data[index].contact = document.getElementById('yp-contact').value;
+                data[index].start = document.getElementById('yp-start').value;
+                data[index].end = document.getElementById('yp-end').value;
+            }
+        }
+        else if(type === 'shift-in') {
+            let index = data.findIndex(d => d.sid === String(editingId));
+            if(index !== -1) {
+                data[index].name = document.getElementById('si-name').value;
+                data[index].class = document.getElementById('si-class').value;
+                data[index].campus = document.getElementById('si-campus').value;
+                data[index].pendingFee = document.getElementById('si-pending-fee').value;
+                data[index].pendingAdm = document.getElementById('si-pending-adm').value;
+                data[index].fund = document.getElementById('si-fund').value;
+            }
+        }
+        else if(type === 'shift-out') {
+            let index = data.findIndex(d => d.sid === String(editingId));
+            if(index !== -1) {
+                data[index].name = document.getElementById('so-name').value;
+                data[index].class = document.getElementById('so-class').value;
+                data[index].campus = document.getElementById('so-campus').value;
+                data[index].pendingFee = document.getElementById('so-pending-fee').value;
+                data[index].pendingAdm = document.getElementById('so-pending-adm').value;
+                data[index].fund = document.getElementById('so-fund').value;
+            }
+        }
+        else if(type === 'left') {
+            let index = data.findIndex(d => d.sid === String(editingId));
+            if(index !== -1) {
+                data[index].name = document.getElementById('ls-name').value;
+                data[index].class = document.getElementById('ls-class').value;
+                data[index].pendingFee = document.getElementById('ls-pending-fee').value;
+                data[index].pendingAdm = document.getElementById('ls-pending-adm').value;
+                data[index].fund = document.getElementById('ls-fund').value;
+                data[index].reason = document.getElementById('ls-reason').value;
+            }
+        }
+        else if(type === 'van') {
+            let index = data.findIndex(d => d.sid === String(editingId));
+            if(index !== -1) {
+                data[index].name = document.getElementById('vn-name').value;
+                data[index].class = document.getElementById('vn-class').value;
+                data[index].fee = document.getElementById('vn-fee').value;
+                data[index].address = document.getElementById('vn-address').value;
+            }
+        }
+        else if(type === 'advance') {
+            let index = data.findIndex(d => d.sid === String(editingId));
+            if(index !== -1) {
+                data[index].name = document.getElementById('af-name').value;
+                data[index].class = document.getElementById('af-class').value;
+                data[index].month = document.getElementById('af-month').value;
+                data[index].date = document.getElementById('af-date').value;
+                data[index].amount = document.getElementById('af-amount').value;
+            }
+        }
+        
+        localStorage.setItem(type, JSON.stringify(data));
+        cancelEdit(type);
+        loadTable(type, 'table-' + type);
+        
+        // Also reload remaining table if type is new-admission
+        if(type === 'new-admission') {
+            loadTable('remaining', 'table-remaining');
+        }
+        
+        alert('Updated Successfully!');
+    }
+
+    // Cancel Edit
+    function cancelEdit(type) {
+        editingId = null;
+        editingType = null;
+        clearForm(type);
+        
+        // Hide edit buttons
+        const updateBtn = document.getElementById(type + '-update-btn');
+        const cancelBtn = document.getElementById(type + '-cancel-btn');
+        if(updateBtn) updateBtn.classList.add('d-none');
+        if(cancelBtn) cancelBtn.classList.add('d-none');
+    }
+
+    // Delete Data
+    function deleteData(type, id) {
+        if(currentUser !== 'admin') {
+            alert('Only Admin can delete!');
+            return;
+        }
+        if(confirm('Are you sure to delete?')) {
+            let data = JSON.parse(localStorage.getItem(type)) || [];
+            data = data.filter(d => d.id !== id && d.sid !== String(id));
+            localStorage.setItem(type, JSON.stringify(data));
+            loadTable(type, 'table-' + type);
+        }
+    }
+
+    // Clear Form
+    function clearForm(type) {
+        if(type === 'new-admission') {
+            document.getElementById('na-id').value = '';
+            document.getElementById('na-name').value = '';
+            document.getElementById('na-father').value = '';
+            document.getElementById('na-class').value = '';
+            document.getElementById('na-package').value = '';
+            document.getElementById('na-paid').value = '';
+            document.getElementById('na-remaining').value = '';
+            document.getElementById('na-date').value = '';
+            document.getElementById('na-img').value = '';
+            document.getElementById('img-preview-na').src = 'https://via.placeholder.com/50';
+        }
+        else if(type === 'free-kids') {
+            document.getElementById('fk-id').value = '';
+            document.getElementById('fk-name').value = '';
+            document.getElementById('fk-class').value = '';
+            document.getElementById('fk-contact').value = '';
+            document.getElementById('fk-reason').value = '';
+        }
+        else if(type === 'yearly-paid') {
+            document.getElementById('yp-id').value = '';
+            document.getElementById('yp-name').value = '';
+            document.getElementById('yp-class').value = '';
+            document.getElementById('yp-contact').value = '';
+            document.getElementById('yp-start').value = '';
+            document.getElementById('yp-end').value = '';
+        }
+        else if(type === 'shift-in') {
+            document.getElementById('si-id').value = '';
+            document.getElementById('si-name').value = '';
+            document.getElementById('si-class').value = '';
+            document.getElementById('si-campus').value = '';
+            document.getElementById('si-pending-fee').value = '';
+            document.getElementById('si-pending-adm').value = '';
+            document.getElementById('si-fund').value = '';
+            document.getElementById('si-img').value = '';
+        }
+        else if(type === 'shift-out') {
+            document.getElementById('so-id').value = '';
+            document.getElementById('so-name').value = '';
+            document.getElementById('so-class').value = '';
+            document.getElementById('so-campus').value = '';
+            document.getElementById('so-pending-fee').value = '';
+            document.getElementById('so-pending-adm').value = '';
+            document.getElementById('so-fund').value = '';
+            document.getElementById('so-img').value = '';
+        }
+        else if(type === 'left') {
+            document.getElementById('ls-id').value = '';
+            document.getElementById('ls-name').value = '';
+            document.getElementById('ls-class').value = '';
+            document.getElementById('ls-pending-fee').value = '';
+            document.getElementById('ls-pending-adm').value = '';
+            document.getElementById('ls-fund').value = '';
+            document.getElementById('ls-reason').value = '';
+        }
+        else if(type === 'van') {
+            document.getElementById('vn-id').value = '';
+            document.getElementById('vn-name').value = '';
+            document.getElementById('vn-class').value = '';
+            document.getElementById('vn-fee').value = '';
+            document.getElementById('vn-address').value = '';
+        }
+        else if(type === 'advance') {
+            document.getElementById('af-id').value = '';
+            document.getElementById('af-name').value = '';
+            document.getElementById('af-class').value = '';
+            document.getElementById('af-month').value = '';
+            document.getElementById('af-date').value = '';
+            document.getElementById('af-amount').value = '';
+        }
+    }
+
+    // Load Table Data
+    function loadTable(type, tableId) {
+        let data = JSON.parse(localStorage.getItem(type)) || [];
+        let tbody = document.querySelector('#' + tableId + ' tbody');
+        tbody.innerHTML = '';
+        
+        data.forEach(d => {
+            let row = '<tr>';
+            let id = d.id || d.sid || d.id;
+            
+            if(type === 'new-admission' || type === 'remaining') {
+                row += `<td>${d.id}</td><td>${d.name}</td><td>${d.father}</td><td>${d.class}</td><td>${d.package}</td><td>${d.paid}</td><td>${d.remaining}</td><td>${d.date}</td><td><img src="${d.img}" class="img-preview"></td>`;
+            }
+            else if(type === 'free-kids') {
+                row += `<td>${d.id}</td><td>${d.name}</td><td>${d.class}</td><td>${d.contact}</td><td>${d.reason}</td>`;
+            }
+            else if(type === 'yearly-paid') {
+                row += `<td>${d.id}</td><td>${d.name}</td><td>${d.class}</td><td>${d.contact}</td><td>${d.start}</td><td>${d.end}</td>`;
+            }
+            else if(type === 'shift-in' || type === 'shift-out') {
+                let imgHtml = d.img ? `<img src="${d.img}" class="img-preview">` : '-';
+                row += `<td>${d.sid}</td><td>${d.name}</td><td>${d.class}</td><td>${d.campus}</td><td>${d.pendingFee}</td><td>${d.pendingAdm}</td><td>${d.fund}</td><td>${imgHtml}</td>`;
+            }
+            else if(type === 'left') {
+                row += `<td>${d.sid}</td><td>${d.name}</td><td>${d.class}</td><td>${d.pendingFee}</td><td>${d.pendingAdm}</td><td>${d.fund}</td><td>${d.reason}</td>`;
+            }
+            else if(type === 'van') {
+                row += `<td>${d.sid}</td><td>${d.name}</td><td>${d.class}</td><td>${d.fee}</td><td>${d.address}</td>`;
+            }
+            else if(type === 'advance') {
+                row += `<td>${d.sid}</td><td>${d.name}</td><td>${d.class}</td><td>${d.month}</td><td>${d.date}</td><td>${d.amount}</td>`;
+            }
+            else if(type === 'recovery') {
+                row += `<td>${d.date}</td><td>${d.fileName}</td><td><img src="${d.fileData}" class="img-preview"></td>`;
+            }
+            
+            // Action buttons
+            let actionHtml = '';
+            if(currentUser === 'admin') {
+                actionHtml = `
                     <td>
-                        ${currentRole === 'Admin' ? `<button class="btn btn-warning btn-sm" onclick="editAdmission(${index})">Edit</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteAdmission(${index})">Delete</button>` : ''}
+                        <button class="btn btn-warning action-btn" onclick="editData('${type}', ${id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger action-btn" onclick="deleteData('${type}', ${id})"><i class="fas fa-trash"></i></button>
                     </td>
-                </tr>`;
-                tbody.innerHTML += row;
-                const userRow = `<tr>
-                    <td>${ad.studentName}</td>
-                    <td>${ad.fatherName}</td>
-                    <td>${ad.class}</td>
-                    <td>${ad.amount}</td>
-                    <td>${ad.remainingAmount}</td>
-                    <td>${ad.feeMonths}</td>
-                    <td>${ad.year}</td>
-                    <td>${formatDate(ad.date)}</td>
-                </tr>`;
-                userTbody.innerHTML += userRow;
-            });
-        }
-
-        function editAdmission(index) {
-            const ad = admissions[index];
-            document.getElementById('studentName').value = ad.studentName;
-            document.getElementById('fatherName').value = ad.fatherName;
-            document.getElementById('class').value = ad.class;
-            document.getElementById('amount').value = ad.amount;
-            document.getElementById('remainingAmount').value = ad.remainingAmount;
-            document.getElementById('admissionYear').value = ad.year;
-            document.getElementById('date').value = ad.date;
-            // Set selected months
-            const feeMonthsSelect = document.getElementById('feeMonths');
-            const selectedMonths = ad.feeMonths.split(', ').filter(m => m);
-            Array.from(feeMonthsSelect.options).forEach(option => {
-                option.selected = selectedMonths.includes(option.value);
-            });
-            admissions.splice(index, 1);
-            localStorage.setItem('admissions', JSON.stringify(admissions));
-        }
-
-        function deleteAdmission(index) {
-            admissions.splice(index, 1);
-            localStorage.setItem('admissions', JSON.stringify(admissions));
-            loadAdmissions();
-        }
-
-        // Remaining Admissions
-        document.getElementById('remainingAdmissionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const data = {
-                studentName: document.getElementById('remStudentName').value,
-                fatherName: document.getElementById('remFatherName').value,
-                class: document.getElementById('remClass').value,
-                remainingAmount: document.getElementById('remRemainingAmount').value,
-                admissionDate: document.getElementById('remAdmissionDate').value
-            };
-            remainingAdmissions.push(data);
-            localStorage.setItem('remainingAdmissions', JSON.stringify(remainingAdmissions));
-            loadRemainingAdmissions();
-            this.reset();
-        });
-
-        function loadRemainingAdmissions() {
-            const tbody = document.querySelector('#remainingAdmissionTable tbody');
-            tbody.innerHTML = '';
-            const userTbody = document.querySelector('#remainingAdmissionUserTable tbody');
-            userTbody.innerHTML = '';
-            if (remainingAdmissions.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="no-data">No data available.</td></tr>';
-                userTbody.innerHTML = '<tr><td colspan="5" class="no-data">No data available.</td></tr>';
-                return;
+                `;
             }
-            remainingAdmissions.forEach((ad, index) => {
-                const row = `<tr>
-                    <td>${ad.studentName}</td>
-                    <td>${ad.fatherName}</td>
-                    <td>${ad.class}</td>
-                    <td>${ad.remainingAmount}</td>
-                    <td>${formatDate(ad.admissionDate)}</td>
-                    <td>
-                        ${currentRole === 'Admin' ? `<button class="btn btn-warning btn-sm" onclick="editRemainingAdmission(${index})">Edit</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteRemainingAdmission(${index})">Delete</button>` : ''}
-                    </td>
-                </tr>`;
-                tbody.innerHTML += row;
-                const userRow = `<tr>
-                    <td>${ad.studentName}</td>
-                    <td>${ad.fatherName}</td>
-                    <td>${ad.class}</td>
-                    <td>${ad.remainingAmount}</td>
-                    <td>${formatDate(ad.admissionDate)}</td>
-                </tr>`;
-                userTbody.innerHTML += userRow;
-            });
-        }
-
-        function editRemainingAdmission(index) {
-            const ad = remainingAdmissions[index];
-            document.getElementById('remStudentName').value = ad.studentName;
-            document.getElementById('remFatherName').value = ad.fatherName;
-            document.getElementById('remClass').value = ad.class;
-            document.getElementById('remRemainingAmount').value = ad.remainingAmount;
-            document.getElementById('remAdmissionDate').value = ad.admissionDate;
-            remainingAdmissions.splice(index, 1);
-            localStorage.setItem('remainingAdmissions', JSON.stringify(remainingAdmissions));
-        }
-
-        function deleteRemainingAdmission(index) {
-            remainingAdmissions.splice(index, 1);
-            localStorage.setItem('remainingAdmissions', JSON.stringify(remainingAdmissions));
-            loadRemainingAdmissions();
-        }
-
-        // Teacher Salaries
-        document.getElementById('teacherSalaryForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const salaryMonthsSelect = document.getElementById('salaryMonths');
-            const selectedMonths = Array.from(salaryMonthsSelect.selectedOptions).map(option => option.value);
-            const data = {
-                teacherName: document.getElementById('teacherName').value,
-                salaryDeductAmount: document.getElementById('salaryDeductAmount').value,
-                joiningDate: document.getElementById('joiningDate').value,
-                months: selectedMonths.join(', '),
-                year: document.getElementById('salaryYear').value
-            };
-            teacherSalaries.push(data);
-            localStorage.setItem('teacherSalaries', JSON.stringify(teacherSalaries));
-            loadTeacherSalaries();
-            this.reset();
+            
+            row += actionHtml + '</tr>';
+            tbody.innerHTML += row;
         });
+    }
 
-        function loadTeacherSalaries() {
-            const tbody = document.querySelector('#teacherSalaryTable tbody');
-            tbody.innerHTML = '';
-            const userTbody = document.querySelector('#teacherSalaryUserTable tbody');
-            userTbody.innerHTML = '';
-            if (teacherSalaries.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="no-data">No data available.</td></tr>';
-                userTbody.innerHTML = '<tr><td colspan="5" class="no-data">No data available.</td></tr>';
-                return;
-            }
-            teacherSalaries.forEach((ts, index) => {
-                const row = `<tr>
-                    <td>${ts.teacherName}</td>
-                    <td>${ts.salaryDeductAmount}</td>
-                    <td>${formatDate(ts.joiningDate)}</td>
-                    <td>${ts.months}</td>
-                    <td>${ts.year}</td>
-                    <td>
-                        ${currentRole === 'Admin' ? `<button class="btn btn-warning btn-sm" onclick="editTeacherSalary(${index})">Edit</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteTeacherSalary(${index})">Delete</button>` : ''}
-                    </td>
-                </tr>`;
-                tbody.innerHTML += row;
-                const userRow = `<tr>
-                    <td>${ts.teacherName}</td>
-                    <td>${ts.salaryDeductAmount}</td>
-                    <td>${formatDate(ts.joiningDate)}</td>
-                    <td>${ts.months}</td>
-                    <td>${ts.year}</td>
-                </tr>`;
-                userTbody.innerHTML += userRow;
-            });
-        }
-
-        function editTeacherSalary(index) {
-            const ts = teacherSalaries[index];
-            document.getElementById('teacherName').value = ts.teacherName;
-            document.getElementById('salaryDeductAmount').value = ts.salaryDeductAmount;
-            document.getElementById('joiningDate').value = ts.joiningDate;
-            document.getElementById('salaryYear').value = ts.year;
-            // Set selected months
-            const salaryMonthsSelect = document.getElementById('salaryMonths');
-            const selectedMonths = ts.months.split(', ').filter(m => m);
-            Array.from(salaryMonthsSelect.options).forEach(option => {
-                option.selected = selectedMonths.includes(option.value);
-            });
-            teacherSalaries.splice(index, 1);
-            localStorage.setItem('teacherSalaries', JSON.stringify(teacherSalaries));
-        }
-
-        function deleteTeacherSalary(index) {
-            teacherSalaries.splice(index, 1);
-            localStorage.setItem('teacherSalaries', JSON.stringify(teacherSalaries));
-            loadTeacherSalaries();
-        }
-
-        // Skip Vouchers
-        document.getElementById('skipVoucherForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const data = {
-                studentName: document.getElementById('svStudentName').value,
-                fatherName: document.getElementById('svFatherName').value,
-                class: document.getElementById('svClass').value,
-                reason: document.getElementById('svReason').value
-            };
-            skipVouchers.push(data);
-            localStorage.setItem('skipVouchers', JSON.stringify(skipVouchers));
-            loadSkipVouchers();
-            this.reset();
-        });
-
-        function loadSkipVouchers() {
-            const tbody = document.querySelector('#skipVoucherTable tbody');
-            tbody.innerHTML = '';
-            const userTbody = document.querySelector('#skipVoucherUserTable tbody');
-            userTbody.innerHTML = '';
-            if (skipVouchers.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="no-data">No data available.</td></tr>';
-                userTbody.innerHTML = '<tr><td colspan="4" class="no-data">No data available.</td></tr>';
-                return;
-            }
-            skipVouchers.forEach((sv, index) => {
-                const row = `<tr>
-                    <td>${sv.studentName}</td>
-                    <td>${sv.fatherName}</td>
-                    <td>${sv.class}</td>
-                    <td>${sv.reason}</td>
-                    <td>
-                        ${currentRole === 'Admin' ? `<button class="btn btn-warning btn-sm" onclick="editSkipVoucher(${index})">Edit</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteSkipVoucher(${index})">Delete</button>` : ''}
-                    </td>
-                </tr>`;
-                tbody.innerHTML += row;
-                const userRow = `<tr>
-                    <td>${sv.studentName}</td>
-                    <td>${sv.fatherName}</td>
-                    <td>${sv.class}</td>
-                    <td>${sv.reason}</td>
-                </tr>`;
-                userTbody.innerHTML += userRow;
-            });
-        }
-
-        function editSkipVoucher(index) {
-            const sv = skipVouchers[index];
-            document.getElementById('svStudentName').value = sv.studentName;
-            document.getElementById('svFatherName').value = sv.fatherName;
-            document.getElementById('svClass').value = sv.class;
-            document.getElementById('svReason').value = sv.reason; }
-                    function deleteSkipVoucher(index) {
-            skipVouchers.splice(index, 1);
-            localStorage.setItem('skipVouchers', JSON.stringify(skipVouchers));
-            loadSkipVouchers();
-        }
-
-        function loadData(sectionId) {
-            if (sectionId === 'newAdmission') loadAdmissions();
-            else if (sectionId === 'remainingAdmission') loadRemainingAdmissions();
-            else if (sectionId === 'teacherSalary') loadTeacherSalaries();
-            else if (sectionId === 'skipVoucher') loadSkipVouchers();
-        }
-    </script>
+    // Load All Data
+    function loadAllData() {
+        loadTable('new-admission', 'table-new-admission');
+        loadTable('remaining', 'table-remaining');
+        loadTable('free-kids', 'table-free-kids');
+        loadTable('yearly-paid', 'table-yearly-paid');
+        loadTable('shift-in', 'table-shift-in');
+        loadTable('shift-out', 'table-shift-out');
+        loadTable('left', 'table-left');
+        loadTable('van', 'table-van');
+        loadTable('recovery', 'table-recovery');
+        loadTable('advance', 'table-advance');
+    }
+</script>
 </body>
 </html>
